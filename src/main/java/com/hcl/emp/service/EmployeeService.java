@@ -1,6 +1,7 @@
 package com.hcl.emp.service;
 
 import com.hcl.emp.entity.Employee;
+import com.hcl.emp.exception.EmployeeNotFoundException;
 import com.hcl.emp.repository.EmployeeRepository;
 import com.hcl.emp.repository.EmployeeSpecifications;
 import java.util.List;
@@ -54,5 +55,12 @@ public class EmployeeService {
 					.where(EmployeeSpecifications.findByBirthDate(key));
 			return employeeRepository.findAll(specification);
 		}
+	}
+
+	public Optional<Employee> findEmployeeById(Long empId) {
+
+		return Optional
+				.ofNullable(employeeRepository.findById(empId)
+						.orElseThrow(() -> new EmployeeNotFoundException("No employee found - " + empId)));
 	}
 }

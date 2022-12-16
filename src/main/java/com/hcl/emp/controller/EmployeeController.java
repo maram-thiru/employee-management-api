@@ -32,6 +32,12 @@ public class EmployeeController {
 		return employeeService.getAllEmployees();
 	}
 
+	@GetMapping("/{empId}")
+	public Optional<Employee> findEmployeeById(@PathVariable Long empId){
+		log.info(getClass()+ "::findEmployeeById");
+		return employeeService.findEmployeeById(empId);
+	}
+
 	@PostMapping
 	public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
 		log.info(getClass()+ "::saveEmployee");
