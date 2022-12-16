@@ -20,16 +20,19 @@ public class EmployeeService {
 
 	public Employee saveEmployee(Employee employee) {
 		log.info(getClass()+ "::saveEmployee");
-		return employeeRepository.save(employee);
+
+		try {
+			return employeeRepository.save(employee);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			throw new RuntimeException(e);
+		}
+
 	}
 
 	public List<Employee> getAllEmployees() {
 		log.info(getClass()+ "::getAllEmployees");
 		return employeeRepository.findAll();
-	}
-
-	public Employee updateEmployee(Employee employee) {
-		return employeeRepository.save(employee);
 	}
 
 	public Optional<Employee> getEmployeeById(Long empId) {
@@ -41,7 +44,7 @@ public class EmployeeService {
 	}
 
 	public List<Employee> searchEmployee(String key) {
-		Specification<Employee> specification = null;
+		Specification<Employee> specification;
 		if (key.length() == 1) {
 			specification = Specification
 					.where(EmployeeSpecifications.findByGender(key));

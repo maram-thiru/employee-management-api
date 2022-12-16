@@ -1,6 +1,7 @@
 package com.hcl.emp.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hcl.emp.entity.Department;
 import com.hcl.emp.entity.Employee;
 import com.hcl.emp.entity.Gender;
 import com.hcl.emp.service.EmployeeService;
@@ -41,7 +42,11 @@ class EmployeeControllerTest {
 	void test_get_all_employees() throws Exception {
 
 		List<Employee> employees = Stream.of(
-				new Employee(1L, "Thirupathi", "Maram", LocalDate.of(1986, 8, 10), LocalDate.of(2022, 3, 2), Gender.MALE), new Employee(2L, "Shruthi", "Maram", LocalDate.of(1990, 1, 8), LocalDate.of(2022, 3, 2), Gender.FEMALE)).collect(Collectors.toList());
+				new Employee(1L, "Thirupathi", "Maram", LocalDate.of(1986, 8, 10),
+						LocalDate.of(2022, 3, 2), Gender.MALE),
+				new Employee(2L, "Shruthi","Maram", LocalDate.of(1990, 1, 8),
+						LocalDate.of(2022, 3, 2), Gender.FEMALE))
+				.collect(Collectors.toList());
 
 		when(employeeService.getAllEmployees()).thenReturn(employees);
 
@@ -55,15 +60,25 @@ class EmployeeControllerTest {
 
 	@Test
 	void test_save_employee_with_valid_data() throws Exception {
+
+		Department dev = mockDepartmentData();
+
 		Employee employee = new Employee(100L,"Thirupathi", "Maram",
 				LocalDate.of(1986,8,10),
 				LocalDate.of(2022,3,2),
 				Gender.MALE);
 
+
+
 		mockMvc.perform(post("/employees")
 						.contentType("application/json")
 						.content(pojoToJSON(employee)))
 				.andExpect(status().isCreated());
+	}
+
+	private Department mockDepartmentData() {
+		Department dev = new Department(11L, "DEV");
+		return dev;
 	}
 
 	@Test
@@ -114,7 +129,11 @@ class EmployeeControllerTest {
 	}
 
 	private List<Employee> mockEmployeeData() {
-		return Stream.of(new Employee(1L, "Thirupathi", "Maram", LocalDate.of(1986, 8, 10), LocalDate.of(2019, 3, 2), Gender.MALE), new Employee(2L, "Shruthi", "Maram", LocalDate.of(1990, 1, 8), LocalDate.of(2022, 3, 2), Gender.FEMALE)).collect(Collectors.toList());
+		return Stream.of(new Employee(1L, "Thirupathi", "Maram",
+						LocalDate.of(1986, 8, 10), LocalDate.of(2019, 3, 2), Gender.MALE),
+				new Employee(2L, "Shruthi", "Maram", LocalDate.of(1990, 1, 8), LocalDate.of(2022,
+						3, 2), Gender.FEMALE))
+				.collect(Collectors.toList());
 	}
 
 	public static String pojoToJSON(Object object) {
