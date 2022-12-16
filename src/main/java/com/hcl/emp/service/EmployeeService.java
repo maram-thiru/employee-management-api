@@ -45,9 +45,13 @@ public class EmployeeService {
 			specification = Specification
 					.where(EmployeeSpecifications.findByGender(key));
 			return employeeRepository.findAll(specification);
-		} else {
+		} else if(!key.contains("-")) {
 			specification = Specification
 					.where(EmployeeSpecifications.findByLastName(key));
+			return employeeRepository.findAll(specification);
+		} else {
+			specification = Specification
+					.where(EmployeeSpecifications.findByBirthDate(key));
 			return employeeRepository.findAll(specification);
 		}
 	}
