@@ -18,12 +18,12 @@ public class EmployeeService {
 	private final EmployeeRepository employeeRepository;
 
 	public Employee saveEmployee(Employee employee) {
-		log.info("saving employee from service");
+		log.info(getClass()+ "::saveEmployee");
 		return employeeRepository.save(employee);
 	}
 
 	public List<Employee> getAllEmployees() {
-		log.info("calling  getAllEmployees from service");
+		log.info(getClass()+ "::getAllEmployees");
 		return employeeRepository.findAll();
 	}
 

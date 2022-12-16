@@ -28,13 +28,13 @@ public class EmployeeController {
 
 	@GetMapping
 	public List<Employee> getAllEmployees(){
-		log.info("calling  getAllEmployees from service");
+		log.info(getClass()+ "::getAllEmployees");
 		return employeeService.getAllEmployees();
 	}
 
 	@PostMapping
 	public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
-		log.info("saving employee from controller");
+		log.info(getClass()+ "::saveEmployee");
 		return new ResponseEntity<>(employeeService.saveEmployee(employee),HttpStatus.CREATED);
 	}
 
@@ -42,7 +42,7 @@ public class EmployeeController {
 	@PutMapping("/{empId}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable Long empId,
 												   @RequestBody Employee employee) {
-
+		log.info(getClass()+ "::updateEmployee");
 		Optional<Employee>  existingEmployee= employeeService.getEmployeeById(empId);
 		if(existingEmployee.isPresent()) {
 			Employee dbEmployee = existingEmployee.get();
@@ -61,6 +61,7 @@ public class EmployeeController {
 	@DeleteMapping("/{empId}")
 	public ResponseEntity<Employee> deleteEmployee(@PathVariable Long empId) {
 		try {
+			log.info("Deleting employee by id :: " + empId);
 			employeeService.deleteById(empId);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
@@ -70,6 +71,7 @@ public class EmployeeController {
 
 	@GetMapping("/searchBy/{lastName}")
 	public List<Employee> searchBy(@PathVariable("lastName") String lastName) {
+		log.info("Searching for employees having lastName :: " + lastName);
 		return employeeService.searchEmployee(lastName);
 	}
 
