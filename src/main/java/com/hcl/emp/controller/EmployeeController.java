@@ -69,10 +69,10 @@ public class EmployeeController {
 		}
 	}
 
-	@GetMapping("/searchBy/{lastName}")
-	public List<Employee> searchBy(@PathVariable("lastName") String lastName) {
-		log.info("Searching for employees having lastName :: " + lastName);
-		return employeeService.searchEmployee(lastName);
+	@GetMapping("/searchBy/{key}")
+	public List<Employee> searchBy(@PathVariable("key") String key) {
+		log.info("Searching started ");
+		return employeeService.searchEmployee(key);
 	}
 
 }

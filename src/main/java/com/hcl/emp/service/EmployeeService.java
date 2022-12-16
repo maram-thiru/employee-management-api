@@ -39,9 +39,16 @@ public class EmployeeService {
 		employeeRepository.deleteById(empId);
 	}
 
-	public List<Employee> searchEmployee(String lastName) {
-		Specification<Employee> specification = Specification
-				.where(EmployeeSpecifications.findByLastName(lastName));
-		return employeeRepository.findAll(specification);
+	public List<Employee> searchEmployee(String key) {
+		Specification<Employee> specification = null;
+		if (key.length() == 1) {
+			specification = Specification
+					.where(EmployeeSpecifications.findByGender(key));
+			return employeeRepository.findAll(specification);
+		} else {
+			specification = Specification
+					.where(EmployeeSpecifications.findByLastName(key));
+			return employeeRepository.findAll(specification);
+		}
 	}
 }

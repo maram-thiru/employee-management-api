@@ -62,7 +62,6 @@ class EmployeeControllerTest {
 
 		mockMvc.perform(post("/employees")
 						.contentType("application/json")
-						.param("sendWelcomeMail", "true")
 						.content(pojoToJSON(employee)))
 				.andExpect(status().isCreated());
 	}
@@ -79,16 +78,44 @@ class EmployeeControllerTest {
 	void test_search_employee_by_lastname() throws Exception {
 		String searchKey = "Maram";
 
-		List<Employee> employees = Stream.of(
-				new Employee(1L, "Thirupathi", "Maram", LocalDate.of(1986, 8, 10), LocalDate.of(2022, 3, 2), Gender.MALE), new Employee(2L, "Shruthi", "Maram", LocalDate.of(1990, 1, 8), LocalDate.of(2022, 3, 2), Gender.FEMALE)).collect(Collectors.toList());
+		List<Employee> employees = mockEmployeeData();
 
 		when(employeeService.searchEmployee(searchKey)).thenReturn(employees);
 
-		mockMvc.perform(get("/employees/searchBy/{lastName}",searchKey))
+		mockMvc.perform(get("/employees/searchBy/{key}",searchKey))
+				.andExpect(jsonPath("$[0].firstName").value("Thirupathi"))
 				.andExpect(jsonPath("$[0].lastName").value("Maram"))
 				.andExpect(jsonPath("$[0].gender").value("M"));
 	}
 
+	@Test
+	void test_search_employee_by_gender_of_type_M() throws Exception {
+		String searchKey = "M";
+
+		List<Employee> employees = mockEmployeeData();
+
+		when(employeeService.searchEmployee(searchKey)).thenReturn(employees);
+
+		mockMvc.perform(get("/employees/searchBy/{key}",searchKey))
+				.andExpect(jsonPath("$[0].firstName").value("Thirupathi"))
+				.andExpect(jsonPath("$[0].gender").value("M"));
+	}
+	@Test
+	void test_search_employee_by_gender_of_type_F() throws Exception {
+		String searchKey = "F";
+
+		List<Employee> employees = mockEmployeeData();
+
+		when(employeeService.searchEmployee(searchKey)).thenReturn(employees);
+
+		mockMvc.perform(get("/employees/searchBy/{key}",searchKey))
+				.andExpect(jsonPath("$[1].firstName").value("Shruthi"))
+				.andExpect(jsonPath("$[1].gender").value("F"));
+	}
+
+	private List<Employee> mockEmployeeData() {
+		return Stream.of(new Employee(1L, "Thirupathi", "Maram", LocalDate.of(1986, 8, 10), LocalDate.of(2019, 3, 2), Gender.MALE), new Employee(2L, "Shruthi", "Maram", LocalDate.of(1990, 1, 8), LocalDate.of(2022, 3, 2), Gender.FEMALE)).collect(Collectors.toList());
+	}
 
 	public static String pojoToJSON(Object object) {
 		try {
